@@ -1,18 +1,30 @@
-import {signalStore, withState} from '@ngrx/signals'
+import {patchState, signalStore, withMethods, withState} from '@ngrx/signals'
 import { PeriodicElement } from "../types";
+import { PeriodService } from '../period.service';
+import { inject } from '@angular/core';
 
 type PeriodState = {
     period: PeriodicElement[];
-    loaded: boolean;
+    loading: boolean;
     filter: string;
 };
 
 const initialPeriodState: PeriodState = {
     period: [],
-    loaded: false,
+    loading: false,
     filter: ''
 };
 
 export const PeriodStore = signalStore(
-    withState(initialPeriodState)
+    {providedIn: 'root'},
+    withState(initialPeriodState),
+    withMethods(
+        (store, periodService = inject(PeriodService)) => ({
+            async getAll() {
+                 patchState(store, {loading: true});
+                 const periods = await periodService.getAll();
+                 patchState(store, {period: periods, loading: false});
+            }
+        })
+    )
 )
