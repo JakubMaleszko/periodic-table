@@ -13,10 +13,14 @@ async function sleep(delay: number) {
   providedIn: 'root'
 })
 
-// {{ Service with simulated backend  }}
+// {{ Service with simulated backend delays }}
 export class PeriodService {
   async getAll() {
     await sleep(1000);
     return ELEMENT_DATA;
+  }
+  async edit(id: any, parameter: any, newValue: any) {
+    await sleep(500);
+    return true;
   }
 }

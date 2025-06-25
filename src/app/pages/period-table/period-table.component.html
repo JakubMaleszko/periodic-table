@@ -1,32 +1,25 @@
 <div class="container">
     @if(!store.loading()){
-    <table mat-table [dataSource]="dataSource()" >
+    <table mat-table [dataSource]="dataSource()">
+
         <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Pos. </th>
-            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            <td mat-cell *matCellDef="let element" (click)="editCell(element, 'Position')"> {{element.position}} </td>
         </ng-container>
 
-        <!-- Name Column -->
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            <td mat-cell *matCellDef="let element" (click)="editCell(element, 'Name')"> {{element.name}} </td>
         </ng-container>
 
-        <!-- Weight Column -->
         <ng-container matColumnDef="weight">
             <th mat-header-cell *matHeaderCellDef> Weight </th>
-            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+            <td mat-cell *matCellDef="let element" (click)="editCell(element, 'Weight')"> {{element.weight}} </td>
         </ng-container>
 
-        <!-- Symbol Column -->
         <ng-container matColumnDef="symbol">
             <th mat-header-cell *matHeaderCellDef> Symbol </th>
-            <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef class="edit-col"></th>
-            <td mat-cell *matCellDef class="edit-col"> <mat-icon>edit</mat-icon> </td>
+            <td mat-cell *matCellDef="let element" (click)="editCell(element, 'Symbol')"> {{element.symbol}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

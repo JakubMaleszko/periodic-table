@@ -1,4 +1,4 @@
-import {patchState, signalStore, withMethods, withState} from '@ngrx/signals'
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'
 import { PeriodicElement } from "../types";
 import { PeriodService } from '../period.service';
 import { inject } from '@angular/core';
@@ -16,14 +16,25 @@ const initialPeriodState: PeriodState = {
 };
 
 export const PeriodStore = signalStore(
-    {providedIn: 'root'},
+    { providedIn: 'root' },
     withState(initialPeriodState),
     withMethods(
         (store, periodService = inject(PeriodService)) => ({
             async getAll() {
-                 patchState(store, {loading: true});
-                 const periods = await periodService.getAll();
-                 patchState(store, {period: periods, loading: false});
+                patchState(store, { loading: true });
+                const periods = await periodService.getAll();
+                patchState(store, { period: periods, loading: false });
+            },
+
+            async edit(id: any, parameter: any, newValue: any) {
+                await periodService.edit(id, parameter, newValue);
+                patchState(store, (state) => {
+                    return {
+                        period: state.period.map(item =>
+                            item.position === id ? { ...item, [parameter]: newValue } : item
+                        )
+                    }
+                })
             }
         })
     )
