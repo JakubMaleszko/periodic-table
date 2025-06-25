@@ -4,3 +4,8 @@ export interface PeriodicElement {
     weight: number;
     symbol: string;
 }
+
+export interface DialogData {
+  column: string;
+  element: PeriodicElement;
+}

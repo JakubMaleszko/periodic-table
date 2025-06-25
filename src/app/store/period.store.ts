@@ -1,7 +1,8 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals'
 import { PeriodicElement } from "../types";
 import { PeriodService } from '../period.service';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 type PeriodState = {
     period: PeriodicElement[];
@@ -18,6 +19,21 @@ const initialPeriodState: PeriodState = {
 export const PeriodStore = signalStore(
     { providedIn: 'root' },
     withState(initialPeriodState),
+
+    withComputed((store) => ({
+        filtered: computed(() => {
+            const query = store.filter().toLowerCase().trim();
+            if (!query) {
+                return store.period();
+            }
+            return store.period().filter(item =>
+                Object.values(item).some(value =>
+                    value?.toString().toLowerCase().includes(query)
+                )
+            );
+        })
+    })),
+
     withMethods(
         (store, periodService = inject(PeriodService)) => ({
             async getAll() {
@@ -35,6 +51,9 @@ export const PeriodStore = signalStore(
                         )
                     }
                 })
+            },
+            async setFilter(filter: string) {
+                patchState(store, { filter: filter });
             }
         })
     )

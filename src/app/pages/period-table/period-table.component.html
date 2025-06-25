@@ -1,6 +1,17 @@
 <div class="container">
+    <span class="container-heading">Period table</span>
+    <span class="container-subheading">Click on value to change</span>
+    <form>
+        <mat-form-field class="example-full-width">
+            <mat-label>Filter results</mat-label>
+            <input matInput [formControl]="filterControl">
+        </mat-form-field>
+    </form>
+
+    <!-- {{table and loading }}  -->
+
     @if(!store.loading()){
-    <table mat-table [dataSource]="dataSource()">
+    <table mat-table [dataSource]="dataSource()" class="table">
 
         <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Pos. </th>
